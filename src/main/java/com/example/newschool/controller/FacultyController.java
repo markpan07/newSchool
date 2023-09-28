@@ -1,8 +1,10 @@
-package controller;
+package com.example.newschool.controller;
 
-import model.Faculty;
+import com.example.newschool.model.Faculty;
 import org.springframework.web.bind.annotation.*;
-import service.FacultyService;
+import com.example.newschool.service.FacultyService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/faculties")
@@ -32,5 +34,10 @@ public class FacultyController {
     @DeleteMapping("/{id}")
     public Faculty delete(@PathVariable long id) {
         return facultyService.delete(id);
+    }
+
+    @GetMapping("/findByColor")
+    public List<Faculty> findByColor(@RequestParam String color){
+        return facultyService.findByColor(color);
     }
 }

@@ -1,11 +1,12 @@
-package service;
+package com.example.newschool.service;
 
-import model.Faculty;
-import model.Student;
+import com.example.newschool.exception.FacultyNotFoundException;
+import com.example.newschool.model.Faculty;
 import org.springframework.stereotype.Service;
-import exception.FacultyNotFoundException;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class FacultyService {
@@ -18,8 +19,8 @@ public class FacultyService {
         return faculty;
     }
 
-    public Faculty update(long id, Faculty faculty){
-        if(faculties.containsKey(id)) {
+    public Faculty update(long id, Faculty faculty) {
+        if (faculties.containsKey(id)) {
             Faculty oldFaculty = faculties.get(id);
             oldFaculty.setColor(faculty.getColor());
             oldFaculty.setName(faculty.getName());
@@ -31,7 +32,7 @@ public class FacultyService {
     }
 
     public Faculty delete(long id) {
-        if(faculties.containsKey(id)) {
+        if (faculties.containsKey(id)) {
             return faculties.remove(id);
         } else {
             throw new FacultyNotFoundException(id);
@@ -39,11 +40,18 @@ public class FacultyService {
     }
 
     public Faculty get(long id) {
-        if(faculties.containsKey(id)) {
+        if (faculties.containsKey(id)) {
             return faculties.get(id);
         } else {
             throw new FacultyNotFoundException(id);
         }
+    }
+
+    public List<Faculty> findByColor(String color) {
+        List<Faculty> result = faculties.values().stream()
+                .filter(c -> c.getColor().equals(color))
+                .collect(Collectors.toList());
+        return result;
     }
 
 }

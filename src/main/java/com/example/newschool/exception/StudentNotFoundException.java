@@ -1,4 +1,4 @@
-package exception;
+package com.example.newschool.exception;
 
 public class StudentNotFoundException extends NotFoundException {
 

@@ -1,8 +1,10 @@
-package controller;
+package com.example.newschool.controller;
 
-import model.Student;
+import com.example.newschool.model.Student;
 import org.springframework.web.bind.annotation.*;
-import service.StudentService;
+import com.example.newschool.service.StudentService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/students")
@@ -32,6 +34,11 @@ public class StudentController {
     @DeleteMapping("/{id}")
     public Student update(@PathVariable long id) {
         return studentService.delete(id);
+    }
+
+    @GetMapping("/findByAge")
+    public List<Student> findByAge(@RequestParam Integer age) {
+        return studentService.findByAge(age);
     }
 
 }

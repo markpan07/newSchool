@@ -1,4 +1,4 @@
-package model;
+package com.example.newschool.model;
 
 import java.util.Objects;
 

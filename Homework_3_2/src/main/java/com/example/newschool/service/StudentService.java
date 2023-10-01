@@ -1,9 +1,11 @@
 package com.example.newschool.service;
 
 import com.example.newschool.exception.StudentNotFoundException;
+import com.example.newschool.model.Faculty;
 import com.example.newschool.model.Student;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -46,11 +48,20 @@ public class StudentService {
             throw new StudentNotFoundException(id);
         }
     }
+    public List<Student> getAllStudents(){
+        List<Student> collect = new ArrayList<>(students.values());
+        return collect;
+    }
 
     public List<Student> findByAge(Integer age) {
         return students.values().stream()
                 .filter(c -> c.getAge() == age)
                 .collect(Collectors.toList());
+    }
+
+    public void clear(){
+        students.clear();
+        count = 0;
     }
 
 }

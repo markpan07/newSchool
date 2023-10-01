@@ -4,6 +4,7 @@ import com.example.newschool.exception.FacultyNotFoundException;
 import com.example.newschool.model.Faculty;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -52,6 +53,16 @@ public class FacultyService {
                 .filter(c -> c.getColor().equals(color))
                 .collect(Collectors.toList());
         return result;
+    }
+
+    public List<Faculty> getAllFaculties(){
+        List<Faculty> collect = new ArrayList<>(faculties.values());
+        return collect;
+    }
+
+    public void clear(){
+        faculties.clear();
+        count = 0;
     }
 
 }

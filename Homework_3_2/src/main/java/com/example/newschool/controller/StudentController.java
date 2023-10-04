@@ -1,6 +1,7 @@
 package com.example.newschool.controller;
 
 import com.example.newschool.model.Student;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.example.newschool.service.StudentService;
 
@@ -39,6 +40,11 @@ public class StudentController {
     @GetMapping("/findByAge")
     public List<Student> findByAge(@RequestParam Integer age) {
         return studentService.findByAge(age);
+    }
+
+    @GetMapping("/all")
+    public List<Student> getAll() {
+        return studentService.getAllStudents();
     }
 
 }

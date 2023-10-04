@@ -1,5 +1,6 @@
 package com.example.newschool.service;
 
+import com.example.newschool.exception.StudentListIsEmptyException;
 import com.example.newschool.exception.StudentNotFoundException;
 import com.example.newschool.model.Student;
 import org.assertj.core.api.Assertions;
@@ -40,6 +41,13 @@ class StudentServiceTest {
                 isThrownBy(() -> out.update(100, EDITED_STUDENT));
         Assertions.assertThatExceptionOfType(StudentNotFoundException.class).
                 isThrownBy(() -> out.delete(100));
+    }
+
+    @Test
+    void shouldReturnExceptionWhenListIsEmpty(){
+        out.clear();
+        Assertions.assertThatExceptionOfType(StudentListIsEmptyException.class).
+                isThrownBy(() -> out.getAllStudents());
     }
 
     @Test

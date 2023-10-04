@@ -1,5 +1,6 @@
 package com.example.newschool.service;
 
+import com.example.newschool.exception.FacultyListIsEmptyException;
 import com.example.newschool.exception.FacultyNotFoundException;
 import com.example.newschool.model.Faculty;
 import org.springframework.stereotype.Service;
@@ -57,6 +58,9 @@ public class FacultyService {
 
     public List<Faculty> getAllFaculties(){
         List<Faculty> collect = new ArrayList<>(faculties.values());
+        if(collect.isEmpty()) {
+            throw new FacultyListIsEmptyException();
+        }
         return collect;
     }
 

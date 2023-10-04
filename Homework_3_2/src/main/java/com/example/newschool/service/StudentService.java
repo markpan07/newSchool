@@ -1,5 +1,6 @@
 package com.example.newschool.service;
 
+import com.example.newschool.exception.StudentListIsEmptyException;
 import com.example.newschool.exception.StudentNotFoundException;
 import com.example.newschool.model.Faculty;
 import com.example.newschool.model.Student;
@@ -50,6 +51,9 @@ public class StudentService {
     }
     public List<Student> getAllStudents(){
         List<Student> collect = new ArrayList<>(students.values());
+        if(collect.isEmpty()){
+            throw new StudentListIsEmptyException();
+        }
         return collect;
     }
 

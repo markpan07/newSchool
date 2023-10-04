@@ -2,7 +2,9 @@ package com.example.newschool.service;
 
 import static com.example.newschool.constants.FacultyServiceTestConstants.*;
 
+import com.example.newschool.exception.FacultyListIsEmptyException;
 import com.example.newschool.exception.FacultyNotFoundException;
+import com.example.newschool.exception.StudentListIsEmptyException;
 import com.example.newschool.model.Faculty;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
@@ -34,12 +36,22 @@ class FacultyServiceTest {
 
     @Test
     void shouldReturnExceptionWhenIncorrectId() {
+        out.clear();
         Assertions.assertThatExceptionOfType(FacultyNotFoundException.class).
                 isThrownBy(() -> out.get(100));
         Assertions.assertThatExceptionOfType(FacultyNotFoundException.class).
                 isThrownBy(() -> out.update(100, EDITED_FACULTY));
         Assertions.assertThatExceptionOfType(FacultyNotFoundException.class).
                 isThrownBy(() -> out.delete(100));
+        Assertions.assertThatExceptionOfType(FacultyListIsEmptyException.class).
+                isThrownBy(() -> out.getAllFaculties());
+    }
+
+    @Test
+    void shouldReturnExceptionWhenListIsEmpty(){
+        out.clear();
+        Assertions.assertThatExceptionOfType(FacultyListIsEmptyException.class).
+                isThrownBy(() -> out.getAllFaculties());
     }
 
     @Test

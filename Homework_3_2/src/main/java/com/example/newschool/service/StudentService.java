@@ -2,8 +2,8 @@ package com.example.newschool.service;
 
 import com.example.newschool.exception.StudentListIsEmptyException;
 import com.example.newschool.exception.StudentNotFoundException;
-import com.example.newschool.model.Faculty;
 import com.example.newschool.model.Student;
+import com.example.newschool.repository.StudentRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -13,59 +13,55 @@ import java.util.stream.Collectors;
 
 @Service
 public class StudentService {
-    private HashMap<Long, Student> students = new HashMap<Long, Student>();
-    private long count = 0;
+    private final StudentRepository studentRepository;
+
+
+    public StudentService(StudentRepository studentRepository){
+        this.studentRepository = studentRepository;
+    }
 
     public Student create(Student student) {
-        student.setId(++count);
-        students.put(student.getId(), student);
-        return student;
+        student.setId(null);
+        return studentRepository.save(student);
     }
 
     public Student update(long id, Student student) {
-        if (students.containsKey(id)) {
-            Student oldStudent = students.get(id);
-            oldStudent.setAge(student.getAge());
-            oldStudent.setName(student.getName());
-            students.replace(id, oldStudent);
-            return oldStudent;
+        if (studentRepository.existsById(id)) {
+            return studentRepository.save(student);
         } else {
             throw new StudentNotFoundException(id);
         }
     }
 
     public Student delete(long id) {
-        if (students.containsKey(id)) {
-            return students.remove(id);
-        } else {
-            throw new StudentNotFoundException(id);
-        }
+        Student student = studentRepository.findById(id).orElseThrow(() -> new StudentNotFoundException(id));
+        studentRepository.delete(student);
+        return student;
     }
 
     public Student get(long id) {
-        if (students.containsKey(id)) {
-            return students.get(id);
-        } else {
-            throw new StudentNotFoundException(id);
-        }
+        Student student = studentRepository.findById(id).orElseThrow(() -> new StudentNotFoundException(id));
+        return student;
     }
+
+    public List<Student> findAllByAge(Integer age) {
+        List <Student> faculties = studentRepository.findAllByAge(age);
+        if (faculties.isEmpty()){
+            throw new StudentListIsEmptyException();
+        }
+        return faculties;
+    }
+
     public List<Student> getAllStudents(){
-        List<Student> collect = new ArrayList<>(students.values());
-        if(collect.isEmpty()){
+        List<Student> collect = studentRepository.findAll().stream().collect(Collectors.toList());
+        if(collect.isEmpty()) {
             throw new StudentListIsEmptyException();
         }
         return collect;
     }
 
-    public List<Student> findByAge(Integer age) {
-        return students.values().stream()
-                .filter(c -> c.getAge() == age)
-                .collect(Collectors.toList());
-    }
-
     public void clear(){
-        students.clear();
-        count = 0;
+        studentRepository.deleteAll();
     }
 
 }

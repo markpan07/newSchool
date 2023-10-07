@@ -3,6 +3,7 @@ package com.example.newschool.service;
 import com.example.newschool.exception.FacultyListIsEmptyException;
 import com.example.newschool.exception.FacultyNotFoundException;
 import com.example.newschool.model.Faculty;
+import com.example.newschool.repository.FacultyRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -12,52 +13,47 @@ import java.util.stream.Collectors;
 
 @Service
 public class FacultyService {
-    private HashMap<Long, Faculty> faculties = new HashMap<>();
-    private long count = 0;
+    private final FacultyRepository facultyRepository;
+
+
+    public FacultyService(FacultyRepository facultyRepository){
+        this.facultyRepository = facultyRepository;
+    }
 
     public Faculty create(Faculty faculty) {
-        faculty.setId(++count);
-        faculties.put(faculty.getId(), faculty);
-        return faculty;
+        faculty.setId(null);
+        return facultyRepository.save(faculty);
     }
 
     public Faculty update(long id, Faculty faculty) {
-        if (faculties.containsKey(id)) {
-            Faculty oldFaculty = faculties.get(id);
-            oldFaculty.setColor(faculty.getColor());
-            oldFaculty.setName(faculty.getName());
-            faculties.replace(id, oldFaculty);
-            return oldFaculty;
+        if (facultyRepository.existsById(id)) {
+            return facultyRepository.save(faculty);
         } else {
             throw new FacultyNotFoundException(id);
         }
     }
 
     public Faculty delete(long id) {
-        if (faculties.containsKey(id)) {
-            return faculties.remove(id);
-        } else {
-            throw new FacultyNotFoundException(id);
-        }
+        Faculty faculty = facultyRepository.findById(id).orElseThrow(() -> new FacultyNotFoundException(id));
+        facultyRepository.delete(faculty);
+        return faculty;
     }
 
     public Faculty get(long id) {
-        if (faculties.containsKey(id)) {
-            return faculties.get(id);
-        } else {
-            throw new FacultyNotFoundException(id);
-        }
+        Faculty faculty = facultyRepository.findById(id).orElseThrow(() -> new FacultyNotFoundException(id));
+        return faculty;
     }
 
     public List<Faculty> findByColor(String color) {
-        List<Faculty> result = faculties.values().stream()
-                .filter(c -> c.getColor().equals(color))
-                .collect(Collectors.toList());
-        return result;
+        List <Faculty> faculties = facultyRepository.findAllByColor(color);
+        if (faculties.isEmpty()){
+            throw new FacultyListIsEmptyException();
+        }
+        return faculties;
     }
 
     public List<Faculty> getAllFaculties(){
-        List<Faculty> collect = new ArrayList<>(faculties.values());
+        List<Faculty> collect = facultyRepository.findAll().stream().collect(Collectors.toList());
         if(collect.isEmpty()) {
             throw new FacultyListIsEmptyException();
         }
@@ -65,8 +61,7 @@ public class FacultyService {
     }
 
     public void clear(){
-        faculties.clear();
-        count = 0;
+        facultyRepository.deleteAll();
     }
 
 }

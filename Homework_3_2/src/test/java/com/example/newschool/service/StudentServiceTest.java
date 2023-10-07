@@ -58,7 +58,7 @@ class StudentServiceTest {
 
     @Test
     void shouldReturnAGE_21_COLLECTION() {
-        Assertions.assertThat(out.findByAge(21)).isEqualTo(AGE_21_COLLECTION);
+        Assertions.assertThat(out.findAllByAge(21)).isEqualTo(AGE_21_COLLECTION);
     }
 
     @Test

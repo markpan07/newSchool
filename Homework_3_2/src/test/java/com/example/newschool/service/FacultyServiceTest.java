@@ -6,6 +6,7 @@ import com.example.newschool.exception.FacultyListIsEmptyException;
 import com.example.newschool.exception.FacultyNotFoundException;
 import com.example.newschool.exception.StudentListIsEmptyException;
 import com.example.newschool.model.Faculty;
+import com.example.newschool.repository.FacultyRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,6 +16,7 @@ import org.junit.jupiter.api.Test;
 class FacultyServiceTest {
 
     private static final FacultyService out = new FacultyService();
+
 
     @BeforeEach
     public void setUp() {

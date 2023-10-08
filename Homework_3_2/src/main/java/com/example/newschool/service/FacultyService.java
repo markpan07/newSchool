@@ -6,9 +6,8 @@ import com.example.newschool.model.Faculty;
 import com.example.newschool.repository.FacultyRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,6 +26,7 @@ public class FacultyService {
 
     public Faculty update(long id, Faculty faculty) {
         if (facultyRepository.existsById(id)) {
+            faculty.setId(id);
             return facultyRepository.save(faculty);
         } else {
             throw new FacultyNotFoundException(id);
@@ -58,6 +58,10 @@ public class FacultyService {
             throw new FacultyListIsEmptyException();
         }
         return collect;
+    }
+
+    public List<Faculty> findAllByColorOrName(String colorOrName) {
+        return facultyRepository.findAllByColorContainingIgnoreCaseOrNameContainingIgnoreCase(colorOrName, colorOrName);
     }
 
     public void clear() {

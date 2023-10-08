@@ -6,8 +6,6 @@ import com.example.newschool.model.Student;
 import com.example.newschool.repository.StudentRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,6 +25,7 @@ public class StudentService {
 
     public Student update(long id, Student student) {
         if (studentRepository.existsById(id)) {
+            student.setId(id);
             return studentRepository.save(student);
         } else {
             throw new StudentNotFoundException(id);
@@ -58,6 +57,10 @@ public class StudentService {
             throw new StudentListIsEmptyException();
         }
         return collect;
+    }
+
+    public List<Student> findByAgeBetween (Integer min, Integer max){
+        return studentRepository.findAllByAgeBetween(min, max);
     }
 
     public void clear() {

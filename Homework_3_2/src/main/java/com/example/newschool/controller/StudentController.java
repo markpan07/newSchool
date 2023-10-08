@@ -37,13 +37,12 @@ public class StudentController {
         return studentService.delete(id);
     }
 
-    @GetMapping("/findByAge")
-    public List<Student> findByAge(@RequestParam Integer age) {
-        return studentService.findAllByAge(age);
-    }
 
     @GetMapping("/all")
-    public List<Student> getAll() {
+    public List<Student> getAll(@RequestParam (required = false) Integer age) {
+        if(age != null) {
+           return studentService.findAllByAge(age);
+        }
         return studentService.getAllStudents();
     }
 

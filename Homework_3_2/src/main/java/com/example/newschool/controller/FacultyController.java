@@ -24,7 +24,7 @@ public class FacultyController {
     }
 
     @GetMapping("/{id}")
-    public Faculty get(@PathVariable long id){
+    public Faculty get(@PathVariable long id) {
         return facultyService.get(id);
     }
 
@@ -39,12 +39,15 @@ public class FacultyController {
     }
 
     @GetMapping("/findByColor")
-    public List<Faculty> findByColor(@RequestParam String color){
+    public List<Faculty> findByColor(@RequestParam String color) {
         return facultyService.findByColor(color);
     }
 
     @GetMapping("/all")
-    public List<Faculty> getAll() {
+    public List<Faculty> getAll(@RequestParam(required = false) String color) {
+        if (color != null) {
+            return facultyService.findByColor(color);
+        }
         return facultyService.getAllFaculties();
     }
 }

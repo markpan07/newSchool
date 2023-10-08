@@ -16,7 +16,7 @@ public class StudentService {
     private final StudentRepository studentRepository;
 
 
-    public StudentService(StudentRepository studentRepository){
+    public StudentService(StudentRepository studentRepository) {
         this.studentRepository = studentRepository;
     }
 
@@ -45,22 +45,22 @@ public class StudentService {
     }
 
     public List<Student> findAllByAge(Integer age) {
-        List <Student> faculties = studentRepository.findAllByAge(age);
-        if (faculties.isEmpty()){
+        List<Student> faculties = studentRepository.findAllByAge(age);
+        if (faculties.isEmpty()) {
             throw new StudentListIsEmptyException();
         }
         return faculties;
     }
 
-    public List<Student> getAllStudents(){
+    public List<Student> getAllStudents() {
         List<Student> collect = studentRepository.findAll().stream().collect(Collectors.toList());
-        if(collect.isEmpty()) {
+        if (collect.isEmpty()) {
             throw new StudentListIsEmptyException();
         }
         return collect;
     }
 
-    public void clear(){
+    public void clear() {
         studentRepository.deleteAll();
     }
 

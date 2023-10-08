@@ -16,7 +16,7 @@ public class FacultyService {
     private final FacultyRepository facultyRepository;
 
 
-    public FacultyService(FacultyRepository facultyRepository){
+    public FacultyService(FacultyRepository facultyRepository) {
         this.facultyRepository = facultyRepository;
     }
 
@@ -45,22 +45,22 @@ public class FacultyService {
     }
 
     public List<Faculty> findByColor(String color) {
-        List <Faculty> faculties = facultyRepository.findAllByColor(color);
-        if (faculties.isEmpty()){
+        List<Faculty> faculties = facultyRepository.findAllByColor(color);
+        if (faculties.isEmpty()) {
             throw new FacultyListIsEmptyException();
         }
         return faculties;
     }
 
-    public List<Faculty> getAllFaculties(){
+    public List<Faculty> getAllFaculties() {
         List<Faculty> collect = facultyRepository.findAll().stream().collect(Collectors.toList());
-        if(collect.isEmpty()) {
+        if (collect.isEmpty()) {
             throw new FacultyListIsEmptyException();
         }
         return collect;
     }
 
-    public void clear(){
+    public void clear() {
         facultyRepository.deleteAll();
     }
 

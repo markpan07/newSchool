@@ -1,9 +1,6 @@
 package com.example.newschool.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
@@ -14,6 +11,9 @@ public class Student {
     private Long id;
     private String name;
     private int age;
+    @ManyToOne
+    @JoinColumn(name = "faculty_id")
+    private Faculty faculty;
 
     public Student(Long id, String name, int age) {
         this.id = id;
@@ -23,6 +23,7 @@ public class Student {
 
     public Student() {
     }
+
 
     public void setId(Long id) {
         this.id = id;
@@ -46,6 +47,14 @@ public class Student {
 
     public int getAge() {
         return age;
+    }
+
+    public Faculty getFaculty() {
+        return faculty;
+    }
+
+    public void setFaculty(Faculty faculty) {
+        this.faculty = faculty;
     }
 
     @Override

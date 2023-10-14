@@ -1,5 +1,6 @@
 package com.example.newschool.controller;
 
+import com.example.newschool.model.Faculty;
 import com.example.newschool.model.Student;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -50,5 +51,11 @@ public class StudentController {
     public List<Student> findByAgeBetween(@RequestParam Integer min, @RequestParam Integer max){
         return studentService.findByAgeBetween(min, max);
     }
+
+    @GetMapping("{id}/faculty)")
+    public Faculty getFacultyByStudentId(@PathVariable Long id) {
+        return studentService.getFacultyByStudentId(id);
+    }
+
 
 }

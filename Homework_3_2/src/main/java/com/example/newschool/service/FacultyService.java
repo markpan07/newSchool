@@ -3,7 +3,9 @@ package com.example.newschool.service;
 import com.example.newschool.exception.FacultyListIsEmptyException;
 import com.example.newschool.exception.FacultyNotFoundException;
 import com.example.newschool.model.Faculty;
+import com.example.newschool.model.Student;
 import com.example.newschool.repository.FacultyRepository;
+import com.example.newschool.repository.StudentRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,10 +15,14 @@ import java.util.stream.Collectors;
 @Service
 public class FacultyService {
     private final FacultyRepository facultyRepository;
+    private final StudentRepository studentRepository;
 
 
-    public FacultyService(FacultyRepository facultyRepository) {
+
+
+    public FacultyService(FacultyRepository facultyRepository, StudentRepository studentRepository) {
         this.facultyRepository = facultyRepository;
+        this.studentRepository = studentRepository;
     }
 
     public Faculty create(Faculty faculty) {
@@ -62,6 +68,10 @@ public class FacultyService {
 
     public List<Faculty> findAllByColorOrName(String colorOrName) {
         return facultyRepository.findAllByColorContainingIgnoreCaseOrNameContainingIgnoreCase(colorOrName, colorOrName);
+    }
+
+    public List<Student> findByFacultyId(Long id){
+        return studentRepository.findByFacultyId(id);
     }
 
     public void clear() {

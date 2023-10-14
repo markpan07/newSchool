@@ -1,6 +1,7 @@
 package com.example.newschool.controller;
 
 import com.example.newschool.model.Faculty;
+import com.example.newschool.model.Student;
 import org.springframework.web.bind.annotation.*;
 import com.example.newschool.service.FacultyService;
 
@@ -52,5 +53,10 @@ public class FacultyController {
     @GetMapping("/findAllByColorOrName")
     public List<Faculty> findAllByColorOrName(@RequestParam String colorOrName) {
         return facultyService.findAllByColorOrName(colorOrName);
+    }
+
+    @GetMapping("{id}/students")
+    public List<Student> findByFacultyId(@PathVariable Long id) {
+        return facultyService.findByFacultyId(id);
     }
 }

@@ -2,6 +2,7 @@ package com.example.newschool.service;
 
 import com.example.newschool.exception.StudentListIsEmptyException;
 import com.example.newschool.exception.StudentNotFoundException;
+import com.example.newschool.model.Faculty;
 import com.example.newschool.model.Student;
 import com.example.newschool.repository.StudentRepository;
 import org.springframework.stereotype.Service;
@@ -61,6 +62,10 @@ public class StudentService {
 
     public List<Student> findByAgeBetween (Integer min, Integer max){
         return studentRepository.findAllByAgeBetween(min, max);
+    }
+
+    public Faculty getFacultyByStudentId (Long id){
+        return this.get(id).getFaculty();
     }
 
     public void clear() {

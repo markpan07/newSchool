@@ -12,6 +12,7 @@ public class StudentMapper {
         entity.setId(dto.getId());
         entity.setAge(dto.getAge());
         entity.setName(dto.getName());
+
         return entity;
     }
 
@@ -20,6 +21,7 @@ public class StudentMapper {
         dto.setAge(student.getAge());
         dto.setName(student.getName());
         dto.setId(student.getId());
+        dto.setFaculty_id(student.getFaculty().getId());
         return dto;
     }
 

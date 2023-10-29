@@ -16,6 +16,12 @@ public class FacultyDTO {
         this.id = 0L;
     }
 
+    public FacultyDTO(Long id, String name, String color) {
+        this.name = name;
+        this.color = color;
+        this.id = id;
+    }
+
     public long getId() {
         return id;
     }

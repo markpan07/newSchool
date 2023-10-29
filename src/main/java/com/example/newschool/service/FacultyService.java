@@ -27,7 +27,6 @@ public class FacultyService {
     }
 
     public FacultyDTO create(FacultyDTO dto) {
-        dto.setId(null);
         return mapper.toDTO(facultyRepository.save(mapper.toEntity(dto)));
 
     }

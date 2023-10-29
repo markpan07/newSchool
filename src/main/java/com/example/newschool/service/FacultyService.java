@@ -4,6 +4,7 @@ import com.example.newschool.DTO.FacultyDTO;
 import com.example.newschool.Mapper.FacultyMapper;
 import com.example.newschool.exception.FacultyListIsEmptyException;
 import com.example.newschool.exception.FacultyNotFoundException;
+import com.example.newschool.exception.NotFoundException;
 import com.example.newschool.model.Faculty;
 import com.example.newschool.model.Student;
 import com.example.newschool.repository.FacultyRepository;

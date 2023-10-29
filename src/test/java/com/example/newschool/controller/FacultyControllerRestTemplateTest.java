@@ -2,21 +2,20 @@ package com.example.newschool.controller;
 
 import com.example.newschool.DTO.FacultyDTO;
 import com.example.newschool.repository.FacultyRepository;
-import org.apache.coyote.Response;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class FacultyControllerTest {
+public class FacultyControllerRestTemplateTest {
     @LocalServerPort
     private int port;
 
@@ -60,10 +59,11 @@ public class FacultyControllerTest {
         FacultyDTO expected = new FacultyDTO("faculty name 2", "faculty color 2");
         expected.setId(2L);
 
-        FacultyDTO response = restTemplate.postForObject("/faculties", fac1, FacultyDTO.class);
-        FacultyDTO response2 = restTemplate.postForObject("/faculties", fac2, FacultyDTO.class);
+        restTemplate.postForObject("/faculties", fac1, FacultyDTO.class);
+        restTemplate.postForObject("/faculties", fac2, FacultyDTO.class);
+        FacultyDTO response = restTemplate.getForObject("/faculties/2", FacultyDTO.class);
 
-        Assertions.assertThat(response2).isEqualTo(expected);
+        Assertions.assertThat(response).isEqualTo(expected);
 
     }
 
@@ -92,6 +92,27 @@ public class FacultyControllerTest {
 
     @Test
     public void deleteFacultyTest() {
+
+        FacultyDTO newFac = new FacultyDTO("new name", "new color");
+        FacultyDTO firstFac = restTemplate.postForObject("/faculties/", fac1, FacultyDTO.class);
+        Assertions.assertThat(firstFac.getId()).isEqualTo(1L);
+
+        ResponseEntity<FacultyDTO> response = restTemplate.exchange(
+                "/faculties/" + firstFac.getId(),
+                HttpMethod.DELETE,
+                null,
+                FacultyDTO.class
+        );
+        Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        Assertions.assertThat(response.getBody()).isEqualTo(firstFac);
+
+        //Проверка не проходит. Почему?
+        //Assertions.assertThatThrownBy(() -> facultyController.get(1)).isEqualTo(new FacultyNotFoundException(1));
+
+        //Также не проходит
+        //Assertions.assertThatThrownBy(()-> restTemplate.getForObject("/faculties/" + firstFac.getId(), FacultyDTO.class))
+         //       .isEqualTo(new FacultyNotFoundException(1));
+
 
     }
 

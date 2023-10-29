@@ -13,7 +13,7 @@ public class FacultyDTO {
     public FacultyDTO(String name, String color) {
         this.name = name;
         this.color = color;
-        //this.id = 0L;
+        this.id = 0L;
     }
 
     public long getId() {

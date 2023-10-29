@@ -3,8 +3,10 @@ package com.example.newschool.controller;
 import com.example.newschool.DTO.FacultyDTO;
 import com.example.newschool.repository.FacultyRepository;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,6 +16,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class FacultyControllerRestTemplateTest {
     @LocalServerPort
@@ -29,29 +32,28 @@ public class FacultyControllerRestTemplateTest {
     private TestRestTemplate restTemplate;
 
     FacultyDTO fac1 = new FacultyDTO("faculty name 1", "faculty color 1");
-
-
     FacultyDTO fac2 = new FacultyDTO("faculty name 2", "faculty color 2");
     FacultyDTO fac3 = new FacultyDTO("faculty name 3", "faculty color 3");
+    FacultyDTO fac4 = new FacultyDTO("faculty name 4", "faculty color 4");
 
-    @BeforeEach
-    public void beforeEach() {
+    @BeforeAll
+    public void beforeAll() {
         facultyRepository.deleteAll();
+        FacultyDTO dto1 = restTemplate.postForObject("/faculties", fac1, FacultyDTO.class);
+        FacultyDTO dto2 = restTemplate.postForObject("/faculties", fac2, FacultyDTO.class);
+        FacultyDTO dto3 = restTemplate.postForObject("/faculties", fac3, FacultyDTO.class);
 
     }
 
     @Test
     public void createFacultyTest() {
 
-        FacultyDTO response = restTemplate.postForObject("/faculties", fac1, FacultyDTO.class);
-        Assertions.assertThat(response.getColor()).isEqualTo("faculty color 1");
-        Assertions.assertThat(response.getId()).isEqualTo(1L);
-        Assertions.assertThat(response.getName()).isEqualTo("faculty name 1");
+        FacultyDTO dto4 = restTemplate.postForObject("/faculties", fac4, FacultyDTO.class);
+        Assertions.assertThat(dto4.getColor()).isEqualTo("faculty color 4");
+        Assertions.assertThat(dto4.getId()).isEqualTo(4L);
+        Assertions.assertThat(dto4.getName()).isEqualTo("faculty name 4");
 
-        FacultyDTO response2 = restTemplate.postForObject("/faculties", fac2, FacultyDTO.class);
-        Assertions.assertThat(response2.getColor()).isEqualTo("faculty color 2");
-        Assertions.assertThat(response2.getId()).isEqualTo(2L);
-        Assertions.assertThat(response2.getName()).isEqualTo("faculty name 2");
+
     }
 
     @Test
@@ -59,8 +61,6 @@ public class FacultyControllerRestTemplateTest {
         FacultyDTO expected = new FacultyDTO("faculty name 2", "faculty color 2");
         expected.setId(2L);
 
-        restTemplate.postForObject("/faculties", fac1, FacultyDTO.class);
-        restTemplate.postForObject("/faculties", fac2, FacultyDTO.class);
         FacultyDTO response = restTemplate.getForObject("/faculties/2", FacultyDTO.class);
 
         Assertions.assertThat(response).isEqualTo(expected);
@@ -70,12 +70,10 @@ public class FacultyControllerRestTemplateTest {
     @Test
     public void updateFacultyTest() {
         FacultyDTO newFac = new FacultyDTO("new name", "new color");
-        newFac.setId(1L);
-        FacultyDTO firstFac = restTemplate.postForObject("/faculties/", fac1, FacultyDTO.class);
-        Assertions.assertThat(firstFac.getId()).isEqualTo(1L);
+
 
         ResponseEntity<FacultyDTO> response = restTemplate.exchange(
-                "/faculties/" + firstFac.getId(),
+                "/faculties/1",
                 HttpMethod.PUT,
                 new HttpEntity<>(newFac),
                 FacultyDTO.class
@@ -93,18 +91,19 @@ public class FacultyControllerRestTemplateTest {
     @Test
     public void deleteFacultyTest() {
 
-        FacultyDTO newFac = new FacultyDTO("new name", "new color");
-        FacultyDTO firstFac = restTemplate.postForObject("/faculties/", fac1, FacultyDTO.class);
-        Assertions.assertThat(firstFac.getId()).isEqualTo(1L);
-
-        ResponseEntity<FacultyDTO> response = restTemplate.exchange(
-                "/faculties/" + firstFac.getId(),
+        FacultyDTO temp = fac2;
+                ResponseEntity<FacultyDTO> response = restTemplate.exchange(
+                "/faculties/2" ,
                 HttpMethod.DELETE,
                 null,
                 FacultyDTO.class
         );
         Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        Assertions.assertThat(response.getBody()).isEqualTo(firstFac);
+        temp.setId(2L);
+        Assertions.assertThat(response.getBody()).isEqualTo(temp);
+        temp.setId(0L);
+
+
 
         //Проверка не проходит. Почему?
         //Assertions.assertThatThrownBy(() -> facultyController.get(1)).isEqualTo(new FacultyNotFoundException(1));
